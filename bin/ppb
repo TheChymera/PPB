@@ -1,0 +1,32 @@
+#! /bin/bash
+
+. ~/.config/ppb.conf
+
+if [ -z ${PPB_TARGET_HOST+x} ]; then
+	echo "ERROR: The PPB_TARGET_HOST variable is unset."
+	echo "Nothing can be uploaded if there is no target host."
+	echo "Please copy the example config file from under \`/etc/ppb.conf\` to \`~/.config/ppb.conf\`,"
+	echo "and fill in the variable values according to your personal settings."
+	exit 1
+fi
+
+if [ -z "$PPB_HTTP_PATH" ]; then
+	PPB_HTTP_PATH=${PPB_PATH_ON_HOST}
+fi
+
+FILEID=$(md5sum ${1})
+EXT="${1##*.}"
+FILEID="${FILEID:0:6}"
+if [[ "${1:0:1}" = "/" || "${1:0:1}" = "~" ]]; then
+	FILEPATH="${1}"
+else
+	FILEPATH="./${1}"
+fi
+if rsync -avP "${FILEPATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${FILEID}.${EXT}" ; then
+	echo Uploaded to: "https://${PPB_HTTP_PATH}/${FILEID}.${EXT}"
+else
+	echo ""
+	echo "ERROR: Could not upload, please check the command below:" &&
+	echo "rsync -avP \"${FILEPATH}\" ${PPB_TARGET_HOST}:\"${PPB_PATH_ON_HOST}/${FILEID}.${EXT}\"" &&
+	exit 1
+fi
