@@ -22,15 +22,18 @@ Uploaded to: https://some.url/ppb/bb04fc.log
 
 ## Installation
 
-Depending on your preferred package manager you may choose one of the following methods:
-
-#### Portage (e.g. on Gentoo Linux):
-This package is available via Portage (the package manager of Gentoo Linux, derivative distributions, and installable on [any other Linux distribution](https://wiki.gentoo.org/wiki/Project:Prefix), or BSD) via the [Chymeric Overlay](https://github.com/TheChymera/overlay).
-Upon enabling the overlay, the package can be emerged:
+Currently, the script can be installed automatically on Gentoo Linux systems, via the [`.gentoo` synchronously developed install specification](http://chymera.eu/docs/dominik_semesterarbeit.pdf).
+To use this functionality, you can run the following commands:
 
 ```console
-root@host # emerge ppb
+user@host $ cd /some/path/you/like 
+user@host $ git clone git@github.com:TheChymera/PPB.git 
+user@host $ su -
+root@host # cd /some/path/you/like/PPB/.gentoo
+root@host # ./install.sh
 ```
+
+Following this the package is installed and managed by your package manager, correspondingly it can be uninstalled via `emerge -C ppb`.
 
 ## Further Development
 
