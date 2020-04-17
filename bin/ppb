@@ -55,6 +55,5 @@ fi
 
 # Cleanup
 if [[ ${TMP_FILE} = 1 ]]; then
-	echo ${FILE_PATH}
 	rm ${FILE_PATH}
 fi
