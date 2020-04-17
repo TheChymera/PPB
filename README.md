@@ -1,6 +1,6 @@
 # PPB - The Personal Pastebin
 
-A simple and emerging script allowing you to pastebin files to a webserver to which you have SSH access.
+A simple and emerging script allowing you to pastebin files and terminal output to a webserver to which you have SSH access.
 
 ## Rationale
 
@@ -37,5 +37,5 @@ Following this the package is installed and managed by your package manager, cor
 
 ## Further Development
 
-Currently the software is very barebones, and only works for files, not for piped output.
+Currently the software is very minimal.
 Help is appreciated in extending it!
