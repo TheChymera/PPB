@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~alpha ~amd64"
 
-DEPEND=""
+DEPEND="app-text/ansifilter"
 RDEPEND=""
 
 src_install() {
