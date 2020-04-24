@@ -36,9 +36,7 @@ if [[ ! ${EXT} = ${FILE_PATH} ]]; then
 fi
 
 # Local file path fixing
-if [[ "${FILE_PATH:0:1}" = "/" || "${FILE_PATH:0:1}" = "~" ]]; then
-	FILE_PATH="${FILE_PATH}"
-else
+if [[ "${FILE_PATH:0:1}" != "/" && "${FILE_PATH:0:1}" != "~" ]]; then
 	FILE_PATH="./${FILE_PATH}"
 fi
 
