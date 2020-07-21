@@ -30,7 +30,7 @@ fi
 # Destination file name
 FILEID=$(md5sum ${FILE_PATH})
 DEST_FILE="${FILEID:0:6}"
-EXT="${FILE_PATH##*.}"
+EXT="${FILE_PATH#*.}"
 if [[ ! ${EXT} = ${FILE_PATH} ]]; then
 	DEST_FILE="${DEST_FILE}.${EXT}"
 fi
