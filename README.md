@@ -12,12 +12,12 @@ PPB, the Personal PasteBin is a simple script allowing you to quickly upload and
 ```console
 user@host $ ppb somefile.png
 sending incremental file list
-build.log
+somefile.png
         223,298 100%  181.70MB/s    0:00:00 (xfr#1, to-chk=0/1)
 
 sent 223,450 bytes  received 35 bytes  148,990.00 bytes/sec
 total size is 223,298  speedup is 1.00
-Uploaded to: https://some.url/ppb/bb04fc.log
+Uploaded to: https://some.url/ppb/bb04fc.png
 ```
 
 ## Installation
