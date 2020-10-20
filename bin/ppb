@@ -41,12 +41,12 @@ if [[ "${FILE_PATH:0:1}" != "/" && "${FILE_PATH:0:1}" != "~" ]]; then
 fi
 
 # Upload
-if rsync -avP "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" ; then
+if rsync --chmod=644 -avP "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" ; then
 	echo Uploaded to: "https://${PPB_HTTP_PATH}/${DEST_FILE}"
 else
 	echo ""
 	echo "ERROR: Could not upload, please check the command below:"
-	echo "rsync -avP \"${FILE_PATH}\" ${PPB_TARGET_HOST}:\"${PPB_PATH_ON_HOST}/${DEST_FILE}\""
+	echo "rsync --chmod=644 -avP \"${FILE_PATH}\" ${PPB_TARGET_HOST}:\"${PPB_PATH_ON_HOST}/${DEST_FILE}\""
 	if [[ ${TMP_FILE} = 1 ]]; then
 		echo "The \"${FILE_PATH}\" file was created by PPB and intended as temporary."
 		echo "We leave it in place to aid in your debugging, please remember to delete it."
