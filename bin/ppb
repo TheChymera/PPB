@@ -2,7 +2,8 @@
 
 . ~/.config/ppb.conf
 
-USAGE="Usage: $(basename $0) [ -d -l -n -u -h ] <path>\n
+USAGE="Usage: $(basename $0) [ -n -h ] <path>\n
+        -d:     Print debugging output.\n
         -n:     Do not write output to clipboard (wl-clipboard and xclip).\n
         -h:     Displays help message.\n
         <path>:	Path to pastebin to be formatted.\n
@@ -39,16 +40,22 @@ if [ -z "$PPB_HTTP_PATH" ]; then
 	PPB_HTTP_PATH=${PPB_PATH_ON_HOST}
 fi
 
+TARGET=${@:$OPTIND}
+if [ -z "${TARGET}" ]; then
+    echo "Please specify a target."
+    exit 1
+fi
+
 # Differential handling of files and piped output
-if [ -z "${1}" ]; then
+if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
 	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
 	ansifilter -H &> ${FILE_PATH}
-elif [[ ! -f ${1} ]]; then
-	echo "There is no \"${1}\" file to upload from your system."
+elif [[ ! -f ${TARGET} ]]; then
+	echo "There is no \"${TARGET}\" file to upload from your system."
 	exit 1
 else
-	FILE_PATH=${1}
+	FILE_PATH=${TARGET}
 fi
 
 # Destination file name
