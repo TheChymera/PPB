@@ -1,0 +1,44 @@
+#! /bin/bash
+
+USAGE="Usage: $(basename $0) [ -n -h ] <target>\n
+        -n:     Do not write output to clipboard (wl-clipboard and xclip).\n
+        -h:     Displays help message.\n
+        <target>:  String to be formatted.\n
+"
+
+# Read options:
+while getopts "nh" flag
+do
+        case "$flag" in
+                n)
+                        NO_CLIPBOARD=1
+                        ;;
+                h)
+                        echo -e "$USAGE"
+                        exit 0
+                        ;;
+                \?)
+                        echo "Invalid option: -$OPTARG" >&2
+                        exit 1
+                        ;;
+        esac
+done
+
+TARGET=${@:$OPTIND}
+if [ -z "${TARGET}" ]; then
+    echo "Please specify a target."
+    exit 1
+fi
+
+if [[ -d "${TARGET}" ]]; then
+    TARGET_FILE=$(ls -rt "${TARGET}" | tail -n 1)
+    TARGET="${TARGET}/${TARGET_FILE}"
+fi
+echo "This utility script has auto-detected the following file to paste:"
+echo "${TARGET}"
+echo "Please check that this is the correct file."
+if [ -z "$NO_CLIPBOARD" ]; then
+    ppb "${TARGET}"
+else
+    ppb -n "${TARGET}"
+fi
