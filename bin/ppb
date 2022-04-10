@@ -41,8 +41,9 @@ if [[ "${FILE_PATH:0:1}" != "/" && "${FILE_PATH:0:1}" != "~" ]]; then
 fi
 
 # Upload
-if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" ; then
-	echo Uploaded to: "https://${PPB_HTTP_PATH}/${DEST_FILE}"
+if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" &> /dev/null ; then
+	echo "Uploaded to:"
+	echo "https://${PPB_HTTP_PATH}/${DEST_FILE}"
 else
 	echo ""
 	echo "ERROR: Could not upload, please check the command below:"
