@@ -3,14 +3,13 @@
 . ~/.config/ppb.conf
 
 USAGE="Usage: $(basename $0) [ -d -l -n -u -h ] <path>\n
-        -d:     Print debugging output.\n
         -n:     Do not write output to clipboard (wl-clipboard and xclip).\n
         -h:     Displays help message.\n
         <path>:	Path to pastebin to be formatted.\n
 "
 
 # Read options:
-while getopts "dlnuh" flag
+while getopts "nh" flag
 do
         case "$flag" in
                 n)
