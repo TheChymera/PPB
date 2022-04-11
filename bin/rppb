@@ -1,27 +1,27 @@
 #! /bin/bash
 
 USAGE="Usage: $(basename $0) [ -n -h ] <target>\n
-        -n:     Do not write output to clipboard (wl-clipboard and xclip).\n
-        -h:     Displays help message.\n
-        <target>:  String to be formatted.\n
+	-n:     	Do not write output to clipboard (wl-clipboard and xclip).\n
+	-h:     	Displays help message.\n
+	<target>:	String to be formatted.\n
 "
 
 # Read options:
 while getopts "nh" flag
 do
-        case "$flag" in
-                n)
-                        NO_CLIPBOARD=1
-                        ;;
-                h)
-                        echo -e "$USAGE"
-                        exit 0
-                        ;;
-                \?)
-                        echo "Invalid option: -$OPTARG" >&2
-                        exit 1
-                        ;;
-        esac
+	case "$flag" in
+		n)
+			NO_CLIPBOARD=1
+			;;
+		h)
+			echo -e "$USAGE"
+			exit 0
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+	esac
 done
 
 TARGET=${@:$OPTIND}
