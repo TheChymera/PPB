@@ -77,7 +77,7 @@ if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST
 	if [ -z "$NO_CLIPBOARD" ]; then
 		wl-copy "${URL}"
 		echo "${URL}" | xclip
-		echo "Upload succeeded and URL added to clioboard:"
+		echo "Upload succeeded and URL added to clipboard:"
 		echo "${URL}"
 	else
 		echo "Uploaded to:"
