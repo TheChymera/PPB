@@ -41,16 +41,16 @@ if [ -z "$PPB_HTTP_PATH" ]; then
 fi
 
 TARGET=${@:$OPTIND}
-if [ -z "${TARGET}" ]; then
-    echo "Please specify a target."
-    exit 1
-fi
 
-# Differential handling of files and piped output
+# Differential handling of files and piped output or file input with bash escape codes:
 if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
 	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
 	ansifilter -H &> ${FILE_PATH}
+elif grep -q "\[[0..9]\+m" ${TARGET}; then
+	TMP_FILE=1
+	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
+	ansifilter -H ${TARGET} &> ${FILE_PATH}
 elif [[ ! -f ${TARGET} ]]; then
 	echo "There is no \"${TARGET}\" file to upload from your system."
 	exit 1
@@ -64,7 +64,7 @@ DEST_FILE="${FILEID:0:6}"
 FILE_BASENAME=$(basename ${FILE_PATH})
 EXT="${FILE_BASENAME#*.}"
 if [[ ! ${EXT} = ${FILE_BASENAME} ]]; then
-        DEST_FILE="${DEST_FILE}.${EXT}"
+	DEST_FILE="${DEST_FILE}.${EXT}"
 fi
 
 # Local file path fixing
