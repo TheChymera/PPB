@@ -47,6 +47,9 @@ if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
 	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
 	ansifilter -H &> ${FILE_PATH}
+# Prevent image files from being handles like text if the grep command finds a hit
+elif $(file --mime-type ${TARGET} | grep -q "image/"); then
+	FILE_PATH=${TARGET}
 elif grep -q "\[[0..9]\+m" ${TARGET}; then
 	TMP_FILE=1
 	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
