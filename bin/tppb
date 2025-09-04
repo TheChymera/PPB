@@ -26,7 +26,7 @@ done
 
 TARGET=${@:$OPTIND}
 if [ -z "$NO_CLIPBOARD" ]; then
-    ppb -p "${PPB_PATH_ON_HOST}/tmp/" "${TARGET}"
+    ppb -p "${PPB_PATH_ON_HOST}/tmp" "${TARGET}"
 else
-    ppb -p "${PPB_PATH_ON_HOST}/tmp/" -n "${TARGET}"
+    ppb -p "${PPB_PATH_ON_HOST}/tmp" -n "${TARGET}"
 fi
