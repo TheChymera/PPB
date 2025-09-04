@@ -2,7 +2,10 @@
 
 . ~/.config/ppb.conf
 
-USAGE="Usage: $(basename $0) [ -n -h ] <path>\n
+
+
+USAGE="Usage: $(basename $0) [-p <path_on_host>] [ -n -h ] <path>\n
+	-p:	Path to upload to, relative to the target host home directory (defaults to PPB_PATH_ON_HOST as set in the config file).
 	-a:	Paste file as is (do not apply ansifilter and do not change extension)\n
 	-n:	Do not write output to clipboard (wl-clipboard and xclip).\n
 	-h:	Displays help message.\n
@@ -10,9 +13,12 @@ USAGE="Usage: $(basename $0) [ -n -h ] <path>\n
 "
 
 # Read options:
-while getopts "anh" flag
+while getopts "p:anh" flag
 do
 	case "$flag" in
+		p)
+			PPB_PATH_ON_HOST="$OPTARG"
+			;;
 		a)
 			PASTE_AS_IS=1
 			;;
@@ -76,6 +82,9 @@ fi
 if [[ "${FILE_PATH:0:1}" != "/" && "${FILE_PATH:0:1}" != "~" ]]; then
 	FILE_PATH="./${FILE_PATH}"
 fi
+
+
+echo "rsync --chmod=644 -avPL ${FILE_PATH} ${PPB_TARGET_HOST}:${PPB_PATH_ON_HOST}/${DEST_FILE}"
 
 # Upload
 if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" &> /dev/null ; then
