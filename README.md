@@ -22,7 +22,7 @@ https://some.url/ppb/bb04fc.png
 
 If you are using a Linux distribution which makes PPB available via your package manager, **this approach is not recommeded**.
 
-PPB consists of a single script and a single config file.
+PPB consists of a small number of scripts and a single config file.
 You can install them manually at the system level via the following commands:
 
 ```console
@@ -30,7 +30,7 @@ user@host $ cd /some/path/you/like
 user@host $ git clone git@github.com:TheChymera/PPB.git
 user@host $ su -
 root@host # cd /some/path/you/like/PPB
-root@host # cp bin/ppb /usr/bin/
+root@host # cp bin/*ppb /usr/bin/
 root@host # cp config/ppb.conf /etc/
 ```
 
