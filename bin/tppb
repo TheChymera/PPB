@@ -1,5 +1,7 @@
 #! /bin/bash
 
+. ~/.config/ppb.conf
+
 USAGE="Usage: $(basename $0) [ -n -h ] <target>\n
 	-n:     	Do not write output to clipboard (wl-clipboard and xclip).\n
 	-h:     	Displays help message.\n
