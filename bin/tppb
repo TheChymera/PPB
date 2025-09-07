@@ -1,5 +1,6 @@
 #! /bin/bash
 
+. /etc/ppb.conf
 . ~/.config/ppb.conf
 
 USAGE="Usage: $(basename $0) [ -n -h ] <target>\n
