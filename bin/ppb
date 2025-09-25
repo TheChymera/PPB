@@ -2,17 +2,26 @@
 
 . ~/.config/ppb.conf
 
-USAGE="Usage: $(basename $0) [ -n -h ] <path>\n
-	-d:	Print debugging output.\n
+
+
+USAGE="Usage: $(basename $0) [-p <path_on_host>] [ -n -h ] <path>\n
+	-p:	Path to upload to, relative to the target host home directory (defaults to PPB_PATH_ON_HOST as set in the config file).
+	-a:	Paste file as is (do not apply ansifilter and do not change extension)\n
 	-n:	Do not write output to clipboard (wl-clipboard and xclip).\n
 	-h:	Displays help message.\n
 	<path>:	Path to pastebin to be formatted.\n
 "
 
 # Read options:
-while getopts "nh" flag
+while getopts "p:anh" flag
 do
 	case "$flag" in
+		p)
+			PPB_PATH_ON_HOST="$OPTARG"
+			;;
+		a)
+			PASTE_AS_IS=1
+			;;
 		n)
 			NO_CLIPBOARD=1
 			;;
@@ -46,14 +55,14 @@ TARGET=${@:$OPTIND}
 if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
 	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
-	ansifilter -H &> ${FILE_PATH}
-# Prevent image files from being handled like text if the grep command would find a hit
-elif $(file --mime-type ${TARGET} | grep -q "image/"); then
+	ansifilter -cH &> ${FILE_PATH}
+elif [ "$PASTE_AS_IS" ]; then
 	FILE_PATH=${TARGET}
-elif grep -q "\[[0..9]\+m" ${TARGET}; then
+elif grep -q --binary-files=without-match $'\033\[[0-9;]*m' "$TARGET"; then
+	# File contains ANSI color codes
 	TMP_FILE=1
 	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
-	ansifilter -H ${TARGET} &> ${FILE_PATH}
+	ansifilter -cH ${TARGET} &> ${FILE_PATH}
 elif [[ ! -f ${TARGET} ]]; then
 	echo "There is no \"${TARGET}\" file to upload from your system."
 	exit 1
@@ -74,6 +83,9 @@ fi
 if [[ "${FILE_PATH:0:1}" != "/" && "${FILE_PATH:0:1}" != "~" ]]; then
 	FILE_PATH="./${FILE_PATH}"
 fi
+
+
+echo "rsync --chmod=644 -avPL ${FILE_PATH} ${PPB_TARGET_HOST}:${PPB_PATH_ON_HOST}/${DEST_FILE}"
 
 # Upload
 if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" &> /dev/null ; then
