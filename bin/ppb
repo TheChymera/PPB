@@ -1,4 +1,5 @@
-#! /bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 . /etc/ppb.conf
 . ~/.config/ppb.conf
@@ -50,19 +51,20 @@ if [ -z "$PPB_HTTP_PATH" ]; then
 	PPB_HTTP_PATH=${PPB_PATH_ON_HOST}
 fi
 
-TARGET=${@:$OPTIND}
+shift $((OPTIND-1))
+TARGET="${1:-}"
 
 # Differential handling of files and piped output or file input with bash escape codes:
 if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
-	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
+	FILE_PATH=$(mktemp /tmp/ppb.XXXXXXX.html)
 	ansifilter -cH &> ${FILE_PATH}
 elif [ "$PASTE_AS_IS" ]; then
 	FILE_PATH=${TARGET}
 elif grep -q --binary-files=without-match $'\033\[[0-9;]*m' "$TARGET"; then
 	# File contains ANSI color codes
 	TMP_FILE=1
-	FILE_PATH="/var/tmp/ppb_$(date +%s).html"
+	FILE_PATH=$(mktemp /tmp/ppb.XXXXXXX.html)
 	ansifilter -cH ${TARGET} &> ${FILE_PATH}
 elif [[ ! -f ${TARGET} ]]; then
 	echo "There is no \"${TARGET}\" file to upload from your system."
