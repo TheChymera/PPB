@@ -1,45 +1,24 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-USAGE="Usage: $(basename "$0") [ -n -h ] <target>\n
-	-n:     	Do not write output to clipboard (wl-clipboard and xclip).\n
-	-h:     	Displays help message.\n
-	<target>:	String to be formatted.\n
+USAGE="Usage: $(basename "$0") [options] <target>
+    Wrapper around ppb that auto-selects the most recent file in a directory.
+    Useful for quickly uploading screenshots or other auto-saved files.
+    Run 'ppb -h' for full argument documentation.
 "
 
-# Read options:
-while getopts "nh" flag
-do
-	case "$flag" in
-		n)
-			NO_CLIPBOARD=1
-			;;
-		h)
-			echo -e "$USAGE"
-			exit 0
-			;;
-		\?)
-			echo "Invalid option: -$OPTARG" >&2
-			exit 1
-			;;
-	esac
-done
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo -e "$USAGE"
+    exit 0
+fi
 
-shift $((OPTIND-1))
-TARGET="$1"
+TARGET="${*: -1}"
 if [ -z "${TARGET}" ]; then
     echo "Please specify a target."
     exit 1
 fi
 
 if [[ -d "${TARGET}" ]]; then
-    TARGET_FILE=$(ls -rt "${TARGET}" | tail -n 1)
-    TARGET="${TARGET}/${TARGET_FILE}"
+    TARGET="${TARGET}/$(ls -rt "${TARGET}" | tail -n 1)"
 fi
-echo "This utility script has auto-detected the following file to paste:"
-echo "${TARGET}"
-echo "Please check that this is the correct file."
-if [ -z "$NO_CLIPBOARD" ]; then
-    ppb "${TARGET}"
-else
-    ppb -n "${TARGET}"
-fi
+
+ppb "${@:1:$#-1}" "${TARGET}"
