@@ -3,14 +3,14 @@
 . /etc/ppb.conf
 . ~/.config/ppb.conf
 
-USAGE="Usage: $(basename $0) [ -n -h ] <target>\n
+USAGE="Usage: $(basename "$0") [ -n -h ] <target>\n
 	-n:     	Do not write output to clipboard (wl-clipboard and xclip).\n
 	-h:     	Displays help message.\n
 	<target>:	String to be formatted.\n
 "
 
 # Read options:
-while getopts "anh" flag
+while getopts "nh" flag
 do
 	case "$flag" in
 		n)
@@ -27,7 +27,8 @@ do
 	esac
 done
 
-TARGET=${@:$OPTIND}
+shift $((OPTIND-1))
+TARGET="$1"
 if [ -z "$NO_CLIPBOARD" ]; then
     ppb -p "${PPB_PATH_ON_HOST}/tmp" "${TARGET}"
 else

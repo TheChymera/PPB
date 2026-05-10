@@ -6,7 +6,7 @@ set -euo pipefail
 
 
 
-USAGE="Usage: $(basename $0) [-p <path_on_host>] [ -n -h ] <path>\n
+USAGE="Usage: $(basename "$0") [-p <path_on_host>] [ -n -h ] <path>\n
 	-p:	Path to upload to, relative to the target host home directory (defaults to PPB_PATH_ON_HOST as set in the config file).
 	-a:	Paste file as is (do not apply ansifilter and do not change extension)\n
 	-n:	Do not write output to clipboard (wl-clipboard and xclip).\n
@@ -58,14 +58,14 @@ TARGET="${1:-}"
 if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
 	FILE_PATH=$(mktemp /tmp/ppbXXXXXXX.html)
-	ansifilter -cH &> ${FILE_PATH}
+	ansifilter -cH &> "${FILE_PATH}"
 elif [ "${PASTE_AS_IS:-}" ]; then
 	FILE_PATH=${TARGET}
 elif grep -q --binary-files=without-match $'\033\[[0-9;]*m' "$TARGET"; then
 	# File contains ANSI color codes
 	TMP_FILE=1
 	FILE_PATH=$(mktemp /tmp/ppbXXXXXXX.html)
-	ansifilter -cH ${TARGET} &> ${FILE_PATH}
+	ansifilter -cH "${TARGET}" &> "${FILE_PATH}"
 elif [[ ! -f ${TARGET} ]]; then
 	echo "There is no \"${TARGET}\" file to upload from your system."
 	exit 1
@@ -74,11 +74,11 @@ else
 fi
 
 # Destination file name
-FILEID=$(md5sum ${FILE_PATH})
+FILEID=$(md5sum "${FILE_PATH}")
 DEST_FILE="${FILEID:0:6}"
-FILE_BASENAME=$(basename ${FILE_PATH})
+FILE_BASENAME=$(basename "${FILE_PATH}")
 EXT="${FILE_BASENAME#*.}"
-if [[ ! ${EXT} = ${FILE_BASENAME} ]]; then
+if [[ ! ${EXT} = "${FILE_BASENAME}" ]]; then
 	DEST_FILE="${DEST_FILE}.${EXT}"
 fi
 
@@ -91,7 +91,7 @@ fi
 echo "rsync --chmod=644 -avPL ${FILE_PATH} ${PPB_TARGET_HOST}:${PPB_PATH_ON_HOST}/${DEST_FILE}"
 
 # Upload
-if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" &> /dev/null ; then
+if rsync --chmod=644 -avPL "${FILE_PATH}" "${PPB_TARGET_HOST}":"${PPB_PATH_ON_HOST}/${DEST_FILE}" &> /dev/null ; then
 	URL="https://${PPB_HTTP_PATH}/${DEST_FILE}"
 	if [ -z "${NO_CLIPBOARD:-}" ]; then
 		wl-copy "${URL}"
@@ -115,5 +115,5 @@ fi
 
 # Cleanup
 if [[ ${TMP_FILE:-} = 1 ]]; then
-	rm ${FILE_PATH}
+	rm "${FILE_PATH}"
 fi

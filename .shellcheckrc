@@ -1,1 +1,4 @@
-disable=SC2012
+# Ignoring
+#  * SC2012 — ls piping
+#  * SC1090,SC1091 — sourced files (we source config files)
+disable=SC2012,SC1090,SC1091

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-USAGE="Usage: $(basename $0) [ -n -h ] <target>\n
+USAGE="Usage: $(basename "$0") [ -n -h ] <target>\n
 	-n:     	Do not write output to clipboard (wl-clipboard and xclip).\n
 	-h:     	Displays help message.\n
 	<target>:	String to be formatted.\n
@@ -24,7 +24,8 @@ do
 	esac
 done
 
-TARGET=${@:$OPTIND}
+shift $((OPTIND-1))
+TARGET="$1"
 if [ -z "${TARGET}" ]; then
     echo "Please specify a target."
     exit 1
