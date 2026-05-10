@@ -63,7 +63,7 @@ if [[ "${RECENT:-}" = 1 ]]; then
 		echo "Please specify a target directory."
 		exit 1
 	elif [[ ! -d "${TARGET}" ]]; then
-		echo "\"${TARGET}\" is not a directory, -r requires a directory as target."
+		echo "\"${TARGET}\" is not a directory, -r requires a target directory."
 		exit 1
 	fi
 	TARGET="${TARGET}/$(ls -rt "${TARGET}" | tail -n 1)"
