@@ -1,6 +1,6 @@
 # PPB - The Personal Pastebin
 
-A simple and emerging script allowing you to pastebin files and terminal output to a webserver to which you have SSH access.
+A simple script allowing you to pastebin files and terminal output to a webserver to which you have SSH access.
 
 ## Rationale
 
