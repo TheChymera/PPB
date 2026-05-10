@@ -59,7 +59,7 @@ if [ -z "${TARGET}" ]; then
 	TMP_FILE=1
 	FILE_PATH=$(mktemp /tmp/ppb.XXXXXXX.html)
 	ansifilter -cH &> ${FILE_PATH}
-elif [ "$PASTE_AS_IS" ]; then
+elif [ "${PASTE_AS_IS:-}" ]; then
 	FILE_PATH=${TARGET}
 elif grep -q --binary-files=without-match $'\033\[[0-9;]*m' "$TARGET"; then
 	# File contains ANSI color codes
@@ -93,7 +93,7 @@ echo "rsync --chmod=644 -avPL ${FILE_PATH} ${PPB_TARGET_HOST}:${PPB_PATH_ON_HOST
 # Upload
 if rsync --chmod=644 -avPL "${FILE_PATH}" ${PPB_TARGET_HOST}:"${PPB_PATH_ON_HOST}/${DEST_FILE}" &> /dev/null ; then
 	URL="https://${PPB_HTTP_PATH}/${DEST_FILE}"
-	if [ -z "$NO_CLIPBOARD" ]; then
+	if [ -z "${NO_CLIPBOARD:-}" ]; then
 		wl-copy "${URL}"
 		echo "${URL}" | xclip
 		echo "Upload succeeded and URL added to clipboard:"
@@ -106,7 +106,7 @@ else
 	echo ""
 	echo "ERROR: Could not upload, please check the command below:"
 	echo "rsync --chmod=644 -avP \"${FILE_PATH}\" ${PPB_TARGET_HOST}:\"${PPB_PATH_ON_HOST}/${DEST_FILE}\""
-	if [[ ${TMP_FILE} = 1 ]]; then
+	if [[ ${TMP_FILE:-} = 1 ]]; then
 		echo "The \"${FILE_PATH}\" file was created by PPB and intended as temporary."
 		echo "We leave it in place to aid in your debugging, please remember to delete it."
 	fi
@@ -114,6 +114,6 @@ else
 fi
 
 # Cleanup
-if [[ ${TMP_FILE} = 1 ]]; then
+if [[ ${TMP_FILE:-} = 1 ]]; then
 	rm ${FILE_PATH}
 fi
