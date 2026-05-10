@@ -77,7 +77,7 @@ fi
 FILEID=$(md5sum ${FILE_PATH})
 DEST_FILE="${FILEID:0:6}"
 FILE_BASENAME=$(basename ${FILE_PATH})
-EXT="${FILE_BASENAME#*.}"
+EXT="${FILE_BASENAME##*.}"
 if [[ ! ${EXT} = ${FILE_BASENAME} ]]; then
 	DEST_FILE="${DEST_FILE}.${EXT}"
 fi
