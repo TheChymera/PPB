@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-. /etc/ppb.conf
-. ~/.config/ppb.conf
+# Catch these due to strict mode
+. /etc/ppb.conf 2>/dev/null || true
+. ~/.config/ppb.conf 2>/dev/null || true
 
-
-
-USAGE="Usage: $(basename "$0") [-p <path_on_host>] [ -n -h ] <path>\n
+USAGE="Usage: $(basename "$0") [-p <path_on_host>] [-a] [-r] [-n] [-h] <path>
 	-p:	Path to upload to, relative to the target host home directory (defaults to PPB_PATH_ON_HOST as set in the config file).
-	-a:	Paste file as is (do not apply ansifilter and do not change extension)\n
-	-n:	Do not write output to clipboard (wl-clipboard and xclip).\n
-	-h:	Displays help message.\n
-	<path>:	Path to pastebin to be formatted.\n
+	-a:	Paste file as is (do not apply ansifilter and do not change extension)
+	-r:	If <path> is a directory, auto-select the most recently modified file in it.
+	-n:	Do not write output to clipboard (wl-clipboard and xclip).
+	-h:	Displays help message.
+	<path>:	Path to pastebin to be formatted.
 "
 
 # Read options:
-while getopts "p:anh" flag
+while getopts "p:anrh" flag
 do
 	case "$flag" in
 		p)
@@ -23,6 +23,9 @@ do
 			;;
 		a)
 			PASTE_AS_IS=1
+			;;
+		r)
+			RECENT=1
 			;;
 		n)
 			NO_CLIPBOARD=1
@@ -39,7 +42,7 @@ do
 done
 
 # Configuration variables check
-if [ -z ${PPB_TARGET_HOST+x} ]; then
+if [ -z "${PPB_TARGET_HOST+x}" ]; then
 	echo "ERROR: The PPB_TARGET_HOST variable is unset."
 	echo "Nothing can be uploaded if there is no target host."
 	echo "Please copy the example config file from under \"/etc/ppb.conf\" to \"~/.config/ppb.conf\","
@@ -53,6 +56,19 @@ fi
 
 shift $((OPTIND-1))
 TARGET="${1:-}"
+
+# If -r is set and TARGET is a directory, auto-select the most recent file.
+if [[ "${RECENT:-}" = 1 ]]; then
+	if [[ -z "${TARGET}" ]]; then
+		echo "Please specify a target directory."
+		exit 1
+	elif [[ ! -d "${TARGET}" ]]; then
+		echo "\"${TARGET}\" is not a directory, -r requires a directory as target."
+		exit 1
+	fi
+	TARGET="${TARGET}/$(ls -rt "${TARGET}" | tail -n 1)"
+	echo "Auto-selected most recent file: ${TARGET}"
+fi
 
 # Differential handling of files and piped output or file input with bash escape codes:
 if [ -z "${TARGET}" ]; then
@@ -86,7 +102,6 @@ fi
 if [[ "${FILE_PATH:0:1}" != "/" && "${FILE_PATH:0:1}" != "~" ]]; then
 	FILE_PATH="./${FILE_PATH}"
 fi
-
 
 echo "rsync --chmod=644 -avPL ${FILE_PATH} ${PPB_TARGET_HOST}:${PPB_PATH_ON_HOST}/${DEST_FILE}"
 
