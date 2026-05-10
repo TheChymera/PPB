@@ -13,7 +13,7 @@ It comes replete with utility improvements such as automatic clipboard update as
 ```console
 user@host $ ppb somefile.png
 Upload succeeded and URL added to clipboard:
-https://some.url/ppb/bb04fc.png
+https://some.url/ppb/b00ba5.png
 ```
 
 ## Installation
