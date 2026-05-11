@@ -6,7 +6,7 @@ A simple script allowing you to pastebin files and terminal output to a webserve
 
 With pastebins becoming increasingly cluttered with ads and eye candy as well as increasingly restrictive in terms of file size and temporal persistency, it seems you need to take things into your own hands!
 PPB, the Personal PasteBin, is a simple script allowing you to quickly upload and share files on your machine.
-It comes replete with utility improvements such as automatic clipboard update as well as most-recent-file-in-directory upload via the `rppb` wrapper command.
+It comes replete with utility improvements such as automatic clipboard update, the `tppb` wrapper for tempdir-upload,  as well as most-recent-file-in-directory upload via the `-r` flag.
 
 ## Usage
 
