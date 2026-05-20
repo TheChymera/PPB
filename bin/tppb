@@ -3,13 +3,13 @@
 . ~/.config/ppb.conf
 
 USAGE="Usage: $(basename "$0") [options] <target>
-    Thin wrapper around ppb that uploads to \${PPB_PATH_ON_HOST}/tmp.
-    Run 'ppb -h' for full argument documentation.
+	Thin wrapper around ppb that uploads to \${PPB_PATH_ON_HOST}/tmp.
+	Run 'ppb -h' for full argument documentation.
 "
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    echo -e "$USAGE"
-    exit 0
+	echo -e "$USAGE"
+	exit 0
 fi
 
 ppb -p "${PPB_PATH_ON_HOST}/tmp" "$@"
